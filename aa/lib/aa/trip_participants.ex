@@ -101,4 +101,11 @@ defmodule Aa.TripParticipants do
   def change_trip_participant(%TripParticipant{} = trip_participant, attrs \\ %{}) do
     TripParticipant.changeset(trip_participant, attrs)
   end
+
+  def exists?(user_id, trip_id) do
+    from(tp in TripParticipant,
+      where: tp.user_id == ^user_id and tp.trip_id == ^trip_id
+    )
+    |> Repo.exists?()
+  end
 end

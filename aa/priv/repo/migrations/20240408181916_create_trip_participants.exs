@@ -8,5 +8,7 @@ defmodule Aa.Repo.Migrations.CreateTripParticipants do
 
       timestamps(type: :utc_datetime)
     end
+
+    create_if_not_exists(unique_index(:trip_participants, [:trip_id, :user_id]))
   end
 end

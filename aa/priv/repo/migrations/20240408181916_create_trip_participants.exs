@@ -3,8 +3,8 @@ defmodule Aa.Repo.Migrations.CreateTripParticipants do
 
   def change do
     create table(:trip_participants) do
-      add :trip_id, :integer
-      add :user_id, :integer
+      add :user_id, references(:users, on_delete: :delete_all)
+      add :trip_id, references(:trips, on_delete: :delete_all)
 
       timestamps(type: :utc_datetime)
     end

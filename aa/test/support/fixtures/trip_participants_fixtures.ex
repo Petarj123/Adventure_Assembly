@@ -11,8 +11,8 @@ defmodule Aa.TripParticipantsFixtures do
     {:ok, trip_participant} =
       attrs
       |> Enum.into(%{
-        trip_id: 42,
-        user_id: 42
+        trip_id: 1,
+        user_id: 1
       })
       |> Aa.TripParticipants.create_trip_participant()
 

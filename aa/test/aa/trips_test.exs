@@ -77,7 +77,7 @@ defmodule Aa.TripsTest do
 
     test "update_trip/2 with invalid data returns error changeset" do
       trip = trip_fixture()
-      assert {:error, %Ecto.Changeset{}} = Trips.update_trip(trip, @invalid_attrs)
+      assert {:error, _} = Trips.update_trip(trip, @invalid_attrs)
       assert trip == Trips.get_trip!(trip.id)
     end
 

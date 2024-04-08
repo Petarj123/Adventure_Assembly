@@ -7,6 +7,8 @@ defmodule Aa.Trips do
   alias Aa.Repo
 
   alias Aa.Trips.Trip
+  alias Aa.TripParticipants
+  alias Aa.UserTripRoles
 
   @doc """
   Returns the list of trips.
@@ -50,9 +52,30 @@ defmodule Aa.Trips do
 
   """
   def create_trip(attrs \\ %{}) do
-    %Trip{}
-    |> Trip.changeset(attrs)
-    |> Repo.insert()
+    multi =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:trip, Trip.changeset(%Trip{}, attrs))
+      |> Ecto.Multi.run(:trip_participant, fn _repo, %{trip: trip} ->
+        TripParticipants.create_trip_participant(%{
+          user_id: trip.created_by_user_id,
+          trip_id: trip.id
+        })
+      end)
+      |> Ecto.Multi.run(:user_trip_role, fn _repo, %{trip: trip} ->
+        UserTripRoles.create_user_trip_role(%{
+          user_id: trip.created_by_user_id,
+          trip_id: trip.id,
+          trip_role_id: 1
+        })
+      end)
+
+    case Repo.transaction(multi) do
+      {:ok, %{trip: trip}} ->
+        {:ok, trip}
+
+      {:error, _, changeset, _} ->
+        {:error, changeset}
+    end
   end
 
   @doc """

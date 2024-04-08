@@ -9,3 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Aa.Accounts.User
+
+Aa.Repo.insert!(%User{email: "test@gmail.com", hashed_password: "Test123#4222"})
